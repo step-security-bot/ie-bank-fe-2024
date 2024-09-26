@@ -62,7 +62,7 @@ This will create a `node_modules` folder with all the dependencies needed to run
 
 ![Configure launch.json on VS Code](https://github.com/microsoft/vscode-recipes/raw/main/vuejs-cli/config_add.png)
 
-2. **Configure the `tasks.json` file**. Replace content of the generated `launch.json` with the following configurations:
+2. **Configure the `launch.json` file**. Replace content of the generated `launch.json` with the following configurations:
 
 ```json
 {
