@@ -66,31 +66,28 @@ This will create a `node_modules` folder with all the dependencies needed to run
 
 ```json
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "msedge",
-            "request": "launch",
-            "name": "IE Bank Frontend",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}",
-            "breakOnLoad": true,
-            "pathMapping": {
-              "/_karma_webpack_": "${workspaceFolder}"
-            },
-            "sourceMapPathOverrides": {
-              "webpack:/*": "${webRoot}/*",
-              "/./*": "${webRoot}/*",
-              "/src/*": "${webRoot}/*",
-              "/*": "*",
-              "/./~/*": "${webRoot}/node_modules/*"
-            },
-            "preLaunchTask": "vuejs: start"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "IE Bank Frontend",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}",
+      "breakOnLoad": true,
+      "pathMapping": {
+        "/_karma_webpack_": "${workspaceFolder}"
+      },
+      "sourceMapPathOverrides": {
+        "webpack:/*": "${webRoot}/*",
+        "/./*": "${webRoot}/*",
+        "/src/*": "${webRoot}/*",
+        "/*": "*",
+        "/./~/*": "${webRoot}/node_modules/*"
+      },
+      "preLaunchTask": "vuejs: start"
+    }
+  ]
 }
 ```
 
@@ -98,21 +95,25 @@ This will create a `node_modules` folder with all the dependencies needed to run
 
 ```json
 {
-    "version": "2.0.0",
-    "tasks": [
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "vuejs: start",
+      "type": "npm",
+      "script": "serve",
+      "isBackground": true,
+      "problemMatcher": [
         {
-            "label": "vuejs: build",
-            "type": "npm",
-            "script": "install",
-            "isBackground": true
-        },
-        {
-            "label": "vuejs: start",
-            "type": "npm",
-            "script": "serve",
-            "isBackground": true
+          "base": "$tsc-watch",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "Starting development server",
+            "endsPattern": "Compiled successfully"
+          }
         }
-    ]
+      ]
+    }
+  ]
 }
 ```
 
