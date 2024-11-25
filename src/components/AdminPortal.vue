@@ -24,7 +24,7 @@
             <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">Username</th>
+              <th scope="col">Userusername</th>
               <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -68,15 +68,15 @@
       >
         <b-form @submit="onSubmit" class="w-100">
           <b-form-group
-              id="form-name-group"
-              label="User Name:"
-              label-for="form-name-input"
+              id="form-username-group"
+              label="User Username:"
+              label-for="form-username-input"
           >
             <b-form-input
-                id="form-name-input"
+                id="form-username-input"
                 type="text"
-                v-model="createUserForm.name"
-                placeholder="User Name"
+                v-model="createUserForm.username"
+                placeholder="User Username"
                 required
             >
             </b-form-input>
@@ -110,15 +110,15 @@
       >
         <b-form @submit="onSubmitUpdate" class="w-100">
           <b-form-group
-              id="form-edit-name-group"
-              label="User Name:"
-              label-for="form-edit-name-input"
+              id="form-edit-username-group"
+              label="User Username:"
+              label-for="form-edit-username-input"
           >
             <b-form-input
-                id="form-edit-name-input"
+                id="form-edit-username-input"
                 type="text"
-                v-model="editUserForm.name"
-                placeholder="User Name"
+                v-model="editUserForm.username"
+                placeholder="User Username"
                 required
             >
             </b-form-input>
@@ -134,17 +134,17 @@
 <script>
 import axios from "axios";
 export default {
-  name: "AppUsers",
+  username: "AppUsers",
   data() {
     return {
       users: [],
       createUserForm: {
-        name: "",
+        username: "",
         password: "",
       },
       editUserForm: {
         id: "",
-        name: "",
+        username: "",
       },
       showMessage: false,
       message: "",
@@ -241,10 +241,10 @@ export default {
 
     // Initialize forms empty
     initForm() {
-      this.createUserForm.name = "";
+      this.createUserForm.username = "";
       this.createUserForm.password = "";
       this.editUserForm.id = "";
-      this.editUserForm.name = "";
+      this.editUserForm.username = "";
     },
 
     // Handle submit event for create user
@@ -252,7 +252,7 @@ export default {
       e.preventDefault(); //prevent default form submit form the browser
       this.$refs.addUserModal.hide(); //hide the modal when submitted
       const payload = {
-        name: this.createUserForm.name,
+        username: this.createUserForm.username,
         password: this.createUserForm.password,
       };
       this.RESTcreateUser(payload);
@@ -264,7 +264,7 @@ export default {
       e.preventDefault(); //prevent default form submit form the browser
       this.$refs.editUserModal.hide(); //hide the modal when submitted
       const payload = {
-        name: this.editUserForm.name,
+        username: this.editUserForm.username,
       };
       this.RESTupdateUser(payload, this.editUserForm.id);
       this.initForm();

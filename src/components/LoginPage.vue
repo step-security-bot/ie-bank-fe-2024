@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h1>Admin Login</h1>
+          <h1>Login</h1>
           <hr />
           <br />
           <!-- Allert Message -->
@@ -16,8 +16,26 @@
               type="button"
               class="btn btn-success btn-sm"
               v-b-modal.signin-modal
+              @click="setMode('login-admin')"
           >
-            Sign In
+            Admin Login
+          </button>
+          <button
+              type="button"
+              class="btn btn-success btn-sm"
+              v-b-modal.signin-modal
+              style="margin: 0 20px;"
+              @click="setMode('login-user')"
+          >
+            User Login
+          </button>
+          <button
+              type="button"
+              class="btn btn-success btn-sm"
+              v-b-modal.signin-modal
+              @click="setMode('create-user')"
+          >
+            Create User Account
           </button>
           <br /><br />
           <footer class="text-center">
@@ -28,18 +46,18 @@
       <b-modal
           ref="signInModal"
           id="signin-modal"
-          title="Sign In"
+          :title="this.mode"
           hide-backdrop
           hide-footer
       >
         <b-form @submit="onSubmit" class="w-100">
           <b-form-group
-              id="form-name-group"
+              id="form-username-group"
               label="Username:"
               label-for="form-username-input"
           >
             <b-form-input
-                id="form-name-input"
+                id="form-username-input"
                 type="text"
                 v-model="signInForm.username"
                 placeholder="Enter your username"
@@ -73,7 +91,7 @@
 <script>
 import axios from "axios";
 export default {
-  name: "AppAccounts",
+  username: "AppAccounts",
   data() {
     return {
       accounts: [],
@@ -84,7 +102,8 @@ export default {
       showMessage: false,
       message: "",
       showError: false,
-      error: ""
+      error: "",
+      mode: "",
     };
   },
   methods: {
@@ -94,7 +113,7 @@ export default {
 
     // POST function
     RESTsignIn(payload) {
-      const path = `${process.env.VUE_APP_ROOT_URL}/sign-in`;
+      const path = `${process.env.VUE_APP_ROOT_URL}/admin`;
       axios
           .post(path, payload)
           .then((response) => {
@@ -117,7 +136,25 @@ export default {
           })
           .catch((error) => {
             console.error(error);
-            this.RESTgetAccounts();
+          });
+    },
+    // POST function
+    RESTcreateUser(payload) {
+      const path = `${process.env.VUE_APP_ROOT_URL}/users`;
+      axios
+          .post(path, payload)
+          .then((response) => {
+            // For message alert
+            this.message = "User Created succesfully!";
+            // To actually show the message
+            this.showMessage = true;
+            // To hide the message after 3 seconds
+            setTimeout(() => {
+              this.showMessage = false;
+            }, 3000);
+          })
+          .catch((error) => {
+            console.error(error);
           });
     },
 
@@ -131,6 +168,10 @@ export default {
       this.signInForm.password = "";
     },
 
+    setMode(mode){
+      this.mode = mode;
+    },
+
     // Handle submit event for create account
     onSubmit(e) {
       e.preventDefault(); //prevent default form submit form the browser
@@ -139,7 +180,17 @@ export default {
         username: this.signInForm.username,
         password: this.signInForm.password,
       };
-      this.RESTsignIn(payload);
+      switch(this.mode){
+        case 'login-admin':
+          this.RESTsignIn(payload);
+          break;
+        case 'create-user':
+          this.RESTcreateUser(payload);
+          break;
+        case 'login-user':
+          // TODO: user login
+          break;
+      }
       this.initForm();
     },
   },
