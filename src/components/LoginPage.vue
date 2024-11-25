@@ -138,7 +138,7 @@ export default {
             console.error(error);
           });
     },
-    // POST function
+    // PUT function
     RESTcreateUser(payload) {
       const path = `${process.env.VUE_APP_ROOT_URL}/users`;
       axios
@@ -157,6 +157,34 @@ export default {
             console.error(error);
           });
     },
+    // POST function
+    RESTuserSignIn(payload) {
+      const path = `${process.env.VUE_APP_ROOT_URL}/users/login`;
+      axios
+          .post(path, payload)
+          .then((response) => {
+            if(response.data.result){
+              this.message = "Login successful!";
+              this.showMessage = true;
+              setTimeout(() => {
+                this.showMessage = false;
+              }, 3000);
+            }
+            else{
+              this.error = "Login failed. Please check your credentials and try again.";
+              this.showError = true;
+              setTimeout(() => {
+                this.showError = false;
+              }, 3000);
+            }
+
+            this.$cookies.set("user", response.data.user_id, "3h");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+    },
+
 
     /***************************************************
      * FORM MANAGEMENT
@@ -188,7 +216,7 @@ export default {
           this.RESTcreateUser(payload);
           break;
         case 'login-user':
-          // TODO: user login
+          this.RESTuserSignIn(payload);
           break;
       }
       this.initForm();

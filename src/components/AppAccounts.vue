@@ -10,9 +10,10 @@
           <b-alert v-if="showMessage" variant="success" show>{{
             message
           }}</b-alert>
-          <!-- b-alert v-if="error" variant="danger" show>{{ error }}</b-alert-->
+          <b-alert v-if="showError" variant="danger" show>{{ error }}</b-alert>
 
           <button
+            v-if="this.$cookies.get('admin')==='true'"
             type="button"
             class="btn btn-success btn-sm"
             v-b-modal.account-modal
@@ -24,6 +25,7 @@
             <thead>
               <tr>
                 <th scope="col">Account Name</th>
+                <th scope="col">Owning User ID</th>
                 <th scope="col">Account Number</th>
                 <th scope="col">Account Balance</th>
                 <th scope="col">Account Currency</th>
@@ -34,6 +36,7 @@
             <tbody>
               <tr v-for="account in accounts" :key="account.id">
                 <td>{{ account.name }}</td>
+                <td>{{ account.user_id }}</td>
                 <td>{{ account.account_number }}</td>
                 <td>{{ account.balance }}</td>
                 <td>{{ account.currency }}</td>
@@ -97,6 +100,20 @@
             </b-form-input>
           </b-form-group>
           <b-form-group
+              id="form-name-group"
+              label="User ID:"
+              label-for="form-userid-input"
+          >
+            <b-form-input
+                id="form-userid-input"
+                type="text"
+                v-model="createAccountForm.user_id"
+                placeholder="User ID"
+                required
+            >
+            </b-form-input>
+          </b-form-group>
+          <b-form-group
             id="form-currency-group"
             label="Currency:"
             label-for="form-currency-input"
@@ -117,6 +134,7 @@
       <!-- End of Modal for Create Account-->
       <!-- Start of Modal for Edit Account-->
       <b-modal
+        v-if="this.$cookies.get('admin')==='true'"
         ref="editAccountModal"
         id="edit-account-modal"
         title="Edit the account"
@@ -155,6 +173,7 @@ export default {
       accounts: [],
       createAccountForm: {
         name: "",
+        user_id: 0,
         currency: "",
       },
       editAccountForm: {
@@ -163,6 +182,8 @@ export default {
       },
       showMessage: false,
       message: "",
+      showError: false,
+      error: "",
     };
   },
   methods: {
@@ -172,7 +193,8 @@ export default {
 
     //GET function
     RESTgetAccounts() {
-      const path = `${process.env.VUE_APP_ROOT_URL}/accounts`;
+      const admin = this.$cookies.get('admin') === 'true';
+      const path = `${process.env.VUE_APP_ROOT_URL}/accounts` + (admin? "" : ("/users/" + this.$cookies.get('user')));
       axios
         .get(path)
         .then((response) => {
@@ -256,6 +278,7 @@ export default {
     // Initialize forms empty
     initForm() {
       this.createAccountForm.name = "";
+      this.createAccountForm.user_id = 0;
       this.createAccountForm.currency = "";
       this.editAccountForm.id = "";
       this.editAccountForm.name = "";
@@ -267,6 +290,7 @@ export default {
       this.$refs.addAccountModal.hide(); //hide the modal when submitted
       const payload = {
         name: this.createAccountForm.name,
+        user_id: this.createAccountForm.user_id,
         currency: this.createAccountForm.currency,
       };
       this.RESTcreateAccount(payload);
@@ -286,12 +310,30 @@ export default {
 
     // Handle edit button
     editAccount(account) {
-      this.editAccountForm = account;
+      if(this.$cookies.get('admin')==='true'){
+        this.editAccountForm = account;
+      }
+      else{
+        this.error = "Please login through the admin portal.";
+        this.showError = true;
+        setTimeout(() => {
+          this.showError = false;
+        }, 3000);
+      }
     },
 
     // Handle Delete button
     deleteAccount(account) {
-      this.RESTdeleteAccount(account.id);
+      if(this.$cookies.get('admin')==='true'){
+        this.RESTdeleteAccount(account.id);
+      }
+      else{
+        this.error = "Please login through the admin portal.";
+        this.showError = true;
+        setTimeout(() => {
+          this.showError = false;
+        }, 3000);
+      }
     },
   },
 
