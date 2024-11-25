@@ -4,11 +4,12 @@ import router from './router'
 //install bootstrap first
 import 'bootstrap/dist/css/bootstrap.css'
 import BootstrapVue from "bootstrap-vue";
-
+import VueCookies from 'vue-cookies'
 
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue);
+Vue.use(VueCookies, {expires: '1d'});
 
 new Vue({
   router,

@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Skull from '../components/Skull.vue'
 import AppAccounts from '../components/AppAccounts.vue'
-import AdminLogin from "../components/AdminLogin.vue";
+import AdminLogin from "../components/AdminLogin.vue"
+import AdminPortal from "../components/AdminPortal.vue";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/admin',
     name: 'AdminLogin',
     component: AdminLogin
+  },
+  {
+    path: '/users',
+    name: 'UserManagement',
+    component: AdminPortal
   }
 ]
 

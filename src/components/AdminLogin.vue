@@ -112,6 +112,8 @@ export default {
                 this.showError = false;
               }, 3000);
             }
+
+            this.$cookies.set("admin", response.data.result, "3h");
           })
           .catch((error) => {
             console.error(error);
