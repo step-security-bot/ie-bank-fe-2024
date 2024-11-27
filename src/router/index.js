@@ -5,6 +5,7 @@ import AppAccounts from '../components/AppAccounts.vue'
 import AdminLogin from "../components/LoginPage.vue"
 import AdminPortal from "../components/AdminPortal.vue";
 import LoginPage from "@/components/LoginPage.vue";
+import Transactions from "@/components/Transactions.vue";
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     path: '/users',
     name: 'UserManagement',
     component: AdminPortal
+  },
+  {
+    path: '/transactions',
+    name: 'Transactions',
+    component: Transactions
   }
 ]
 
