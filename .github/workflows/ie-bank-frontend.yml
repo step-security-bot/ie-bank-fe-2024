@@ -30,6 +30,8 @@ jobs:
           cache: 'npm'
 
       - name: npm install and build
+        env:
+          NODE_ENV: development
         run: |
           npm install
           npm run build:dev # Build for development into dist-dev/ folder
@@ -57,6 +59,8 @@ jobs:
           cache: 'npm'
 
       - name: npm install and build
+        env:
+          NODE_ENV: uat
         run: |
           npm install
           npm run build:uat # Build for UAT into dist-uat/ folder
