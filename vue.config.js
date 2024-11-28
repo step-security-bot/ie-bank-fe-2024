@@ -3,10 +3,7 @@ const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
-    devtool: "source-map",
+    devtool: "source-map"
   },
-  outputDir: process.env.NODE_ENV === 'development'
-    ? (process.env.BUILD_ENV === 'uat' ? 'dist-uat' : 'dist-dev')
-    : 'dist',
+  outputDir: process.env.NODE_ENV === 'development' ? 'dist-dev' : (process.env.NODE_ENV === 'uat' ? 'dist-uat' : 'dist-uat')
 });
-
