@@ -12,8 +12,8 @@ on:
       - 'scripts/**'
 
 env:
-  FRONTEND_WEBAPP_DEV: ayabelloum-fe-dev
-  FRONTEND_WEBAPP_UAT: ayabelloum-fe-uat
+  FRONTEND_WEBAPP_DEV: makenna-fe-dev
+  FRONTEND_WEBAPP_UAT: makenna-fe-uat
 
 jobs:
   build-dev:
