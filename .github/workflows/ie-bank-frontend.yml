@@ -1,7 +1,7 @@
 name: ie-bank-frontend
 
 on:
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch:
   pull_request:
     branches:
       - '*' # Matches all branches
@@ -21,26 +21,25 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           cache: 'npm'
 
-      - name: npm install and build
-        env:
-          NODE_ENV: development
-        run: |
-          npm install
-          npm run build:dev # Build for development into dist-dev/ folder
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build for development
+        run: npm run build:dev # Builds using the "development" mode
 
       - name: Verify build output
         run: ls -la dist-dev
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v3
         with:
           name: node-app-dev
           path: dist-dev/
@@ -58,18 +57,17 @@ jobs:
           node-version: '18.x'
           cache: 'npm'
 
-      - name: npm install and build
-        env:
-          NODE_ENV: uat
-        run: |
-          npm install
-          npm run build:uat # Build for UAT into dist-uat/ folder
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build for UAT
+        run: npm run build:uat # Builds using the "uat" mode
 
       - name: Verify build output
         run: ls -la dist-uat
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v3
         with:
           name: node-app-uat
           path: dist-uat/
@@ -83,10 +81,9 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: node-app-dev
-          merge-multiple: false
 
       - name: Login to Azure CLI
         uses: azure/login@v2
@@ -94,11 +91,10 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
-          package: dist-dev/ # Ensure correct path for dev deployment
+          package: dist-dev/
 
   deploy-uat:
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
@@ -109,10 +105,9 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: node-app-uat
-          merge-multiple: false
 
       - name: Login to Azure CLI
         uses: azure/login@v2
@@ -120,8 +115,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_UAT }}
-          package: dist-uat/ # Ensure correct path for UAT deployment
+          package: dist-uat/
