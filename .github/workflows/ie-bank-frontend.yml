@@ -16,7 +16,7 @@ env:
   FRONTEND_WEBAPP_UAT: makenna-fe-uat
 
 jobs:
-  build-dev:
+  build-and-deploy-dev:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,18 +31,23 @@ jobs:
       - name: npm install and build for development
         run: |
           npm install
-          npm run build:dev # Ensures files are generated in the dist/ directory
+          npm run build:dev
 
       - name: Debug build output
-        run: ls -la dist/
+        run: |
+          echo "Listing files in the workspace:"
+          ls -la
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - uses: azure/login@v2
         with:
-          name: build-dev-artifact
-          path: dist/ # Artifacts are uploaded from the dist/ directory
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-  build-uat:
+      - name: Deploy to Azure Web App (Development)
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
+
+  build-and-deploy-uat:
     runs-on: ubuntu-latest
 
     steps:
@@ -57,52 +62,12 @@ jobs:
       - name: npm install and build for UAT
         run: |
           npm install
-          npm run build:uat # Ensures files are generated in the dist/ directory
+          npm run build:uat
 
       - name: Debug build output
-        run: ls -la dist/
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-uat-artifact
-          path: dist/ # Artifacts are uploaded from the dist/ directory
-
-  deploy-dev:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    needs: build-dev
-    environment:
-      name: 'Development'
-
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-dev-artifact
-
-      - uses: azure/login@v2
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Deploy to Azure Web App (Development)
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
-          package: dist/
-
-  deploy-uat:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    needs: build-uat
-    environment:
-      name: 'UAT'
-
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-uat-artifact
+        run: |
+          echo "Listing files in the workspace:"
+          ls -la
 
       - uses: azure/login@v2
         with:
@@ -112,4 +77,3 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_UAT }}
-          package: dist/
