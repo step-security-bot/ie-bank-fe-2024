@@ -148,15 +148,21 @@ export default {
 
     //GET function
     RESTgetTransactions() {
-      const path = `${process.env.VUE_APP_ROOT_URL}/transactions/`+ this.$cookies.get('user');
-      axios
-          .get(path)
-          .then((response) => {
-            this.transactions = response.data.transactions;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      if (this.$cookies.get('user') === '-1'){
+        this.error = "Please log in and try again.";
+        this.showError = true;
+      }
+      else{
+        const path = `${process.env.VUE_APP_ROOT_URL}/transactions/`+ Number(this.$cookies.get('user'));
+        axios
+            .get(path)
+            .then((response) => {
+              this.transactions = response.data.transactions;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      }
     },
 
     // POST function

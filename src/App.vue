@@ -49,6 +49,12 @@ export default {
       this.$cookies.set('user', '-1')
       location.reload();
     }
-  }
+  },
+created() {
+  if (!this.$cookies.get('admin'))
+    this.$cookies.set('admin', 'false');
+  if (!this.$cookies.get('user'))
+    this.$cookies.set('user', '-1');
 }
+};
 </script>
