@@ -28,10 +28,10 @@ jobs:
           node-version: '18.x'
           cache: 'npm'
 
-      - name: npm install and build
+      - name: npm install and build for development
         run: |
           npm install
-          npm run build:dev
+          npm run build:dev # Ensures files are generated in the dist/ directory
 
       - name: Debug build output
         run: ls -la dist/
@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-dev-artifact
-          path: dist/ ## Corrected to use dist/ directly
+          path: dist/ # Artifacts are uploaded from the dist/ directory
 
   build-uat:
     runs-on: ubuntu-latest
@@ -54,10 +54,10 @@ jobs:
           node-version: '18.x'
           cache: 'npm'
 
-      - name: npm install and build
+      - name: npm install and build for UAT
         run: |
           npm install
-          npm run build:uat
+          npm run build:uat # Ensures files are generated in the dist/ directory
 
       - name: Debug build output
         run: ls -la dist/
@@ -66,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-uat-artifact
-          path: dist/ ## Corrected to use dist/ directly
+          path: dist/ # Artifacts are uploaded from the dist/ directory
 
   deploy-dev:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
