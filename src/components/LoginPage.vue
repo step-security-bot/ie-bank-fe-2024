@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import {digest} from "@/main";
 import axios from "axios";
 export default {
   username: "AppAccounts",
@@ -201,12 +202,13 @@ export default {
     },
 
     // Handle submit event for create account
-    onSubmit(e) {
+    async onSubmit(e) {
       e.preventDefault(); //prevent default form submit form the browser
       this.$refs.signInModal.hide(); //hide the modal when submitted
+      let hashedPassword = await digest({ message: this.signInForm.password });
       const payload = {
         username: this.signInForm.username,
-        password: this.signInForm.password,
+        password: hashedPassword,
       };
       switch(this.mode){
         case 'login-admin':
