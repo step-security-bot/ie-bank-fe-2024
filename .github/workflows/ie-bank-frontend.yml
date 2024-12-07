@@ -58,10 +58,10 @@ jobs:
 
       - name: npm install and build (UAT)
         env:
-          NODE_ENV: uat
+          NODE_ENV: development  # Install devDependencies
         run: |
           npm ci
-          npm run build:uat
+          NODE_ENV=uat npm run build:uat
 
       - name: Upload artifact for deployment (UAT)
         uses: actions/upload-artifact@v3
@@ -85,10 +85,10 @@ jobs:
 
       - name: npm install and build (Prod)
         env:
-          NODE_ENV: production
+          NODE_ENV: development  # Install devDependencies
         run: |
           npm ci
-          npm run build:prod
+          NODE_ENV=production npm run build:prod
 
       - name: Upload artifact for deployment (Prod)
         uses: actions/upload-artifact@v3
