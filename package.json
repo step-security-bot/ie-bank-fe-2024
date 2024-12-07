@@ -4,10 +4,13 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build:dev": "vue-cli-service build --mode development",
-    "build:uat": "vue-cli-service build --mode uat"
+    "build:dev": "vue-cli-service build --mode development --dest dist-dev",
+    "build:uat": "vue-cli-service build --mode uat --dest dist-uat",
+    "build:prod": "vue-cli-service build --mode production --dest dist-prod"
+
   },
   "dependencies": {
+    "@vue/cli-service": "~5.0.0",
     "axios": "^1.1.3",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
