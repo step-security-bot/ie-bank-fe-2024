@@ -20,10 +20,10 @@ jobs:
     environment: Development
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3.8.2
         with:
           node-version: '18.x'
           cache: 'npm'
@@ -37,7 +37,7 @@ jobs:
           npm run build:dev
 
       - name: Upload artifact for deployment (Dev)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3.2.1
         with:
           name: node-app-dev
           path: dist-dev/
@@ -47,10 +47,10 @@ jobs:
     environment: UAT
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3.8.2
         with:
           node-version: '18.x'
           cache: 'npm'
@@ -64,7 +64,7 @@ jobs:
           NODE_ENV=uat npm run build:uat
 
       - name: Upload artifact for deployment (UAT)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3.2.1
         with:
           name: node-app-uat
           path: dist-uat/
@@ -74,10 +74,10 @@ jobs:
     environment: Production
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3.8.2
         with:
           node-version: '18.x'
           cache: 'npm'
@@ -91,7 +91,7 @@ jobs:
           NODE_ENV=production npm run build:prod
 
       - name: Upload artifact for deployment (Prod)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3.2.1
         with:
           name: node-app-prod
           path: dist-prod/
@@ -104,19 +104,19 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
         with:
           name: node-app-dev
           path: dist-dev/
 
       - name: Login to Azure CLI
-        uses: azure/login@v2
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App (Dev)
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@4bfb30bef2c330e36be280cb1e5726d0fac06233 # v2.2.13
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
           package: dist-dev/
@@ -129,19 +129,19 @@ jobs:
       url: ${{ steps.deploy-to-webapp-uat.outputs.webapp-url }}
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
         with:
           name: node-app-uat
           path: dist-uat/
 
       - name: Login to Azure CLI
-        uses: azure/login@v2
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App (UAT)
         id: deploy-to-webapp-uat
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@4bfb30bef2c330e36be280cb1e5726d0fac06233 # v2.2.13
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_UAT }}
           package: dist-uat/
@@ -154,19 +154,19 @@ jobs:
       url: ${{ steps.deploy-to-webapp-prod.outputs.webapp-url }}
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3.0.2
         with:
           name: node-app-prod
           path: dist-prod/
 
       - name: Login to Azure CLI
-        uses: azure/login@v2
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Deploy to Azure Web App (Prod)
         id: deploy-to-webapp-prod
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@4bfb30bef2c330e36be280cb1e5726d0fac06233 # v2.2.13
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_PROD }}
           package: dist-prod/
