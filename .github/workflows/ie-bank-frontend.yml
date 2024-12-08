@@ -116,7 +116,7 @@ jobs:
 
       - name: Deploy to Azure Web App (Dev)
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_DEV }}
           package: dist-dev/
@@ -141,7 +141,7 @@ jobs:
 
       - name: Deploy to Azure Web App (UAT)
         id: deploy-to-webapp-uat
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_UAT }}
           package: dist-uat/
@@ -166,7 +166,7 @@ jobs:
 
       - name: Deploy to Azure Web App (Prod)
         id: deploy-to-webapp-prod
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.FRONTEND_WEBAPP_PROD }}
           package: dist-prod/
